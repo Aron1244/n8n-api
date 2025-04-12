@@ -8,11 +8,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+//http://localhost:8000/api/documentation#/Usuarios --> Ruta de la documentación de la API
+
 /**
  * @OA\Info(
- *     title="API de Gestión de Usuarios",
+ *     title="API de Gestión de Usuarios N8N",
  *     version="1.0.0",
- *     description="Puntos finales de la API para el registro y gestión de usuarios"
+ *     description="Documentación de la API para la gestión de usuarios en N8N",
  * )
  *
  * @OA\Post(

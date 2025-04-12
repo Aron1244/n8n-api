@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API de Gestión de Usuarios",
-        "description": "Puntos finales de la API para el registro y gestión de usuarios",
+        "title": "API de Gestión de Usuarios N8N",
+        "description": "Documentación de la API para la gestión de usuarios en N8N",
         "version": "1.0.0"
     },
     "servers": [
