@@ -37,6 +37,15 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        $user = new \App\Models\User();
+        $user->name = 'admin';
+        $user->password = 'admin12345';
+        $user->email = "mail@mail.com";
+        $user->role = 'admin';
+        $user->has_access = true; // Asignar acceso al agente IA
+        $user->email_verified_at = now();
+        $user->save();
     }
 
     /**
