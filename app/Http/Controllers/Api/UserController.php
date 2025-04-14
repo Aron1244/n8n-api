@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
  * )
  *
  * @OA\Post(
- *     path="/users/register",
+ *     path="/users",
  *     summary="Registrar un nuevo usuario",
  *     tags={"Usuarios"},
  *     @OA\RequestBody(

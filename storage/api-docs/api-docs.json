@@ -11,13 +11,58 @@
         }
     ],
     "paths": {
-        "/users/register": {
+        "/users": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Obtener todos los usuarios",
+                "operationId": "119035f2212e07ed2b4f988c4cdd59e2",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Juan Pérez"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "example": "juan.perez@ejemplo.com"
+                                            },
+                                            "role": {
+                                                "type": "string",
+                                                "example": "cliente"
+                                            },
+                                            "has_access": {
+                                                "type": "boolean",
+                                                "example": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Usuarios"
                 ],
                 "summary": "Registrar un nuevo usuario",
-                "operationId": "1a66156539c87c34282b208f56466be1",
+                "operationId": "c16daeb14c1bd6b0d688a28578a43755",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -95,53 +140,6 @@
                                         }
                                     },
                                     "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/users": {
-            "get": {
-                "tags": [
-                    "Usuarios"
-                ],
-                "summary": "Obtener todos los usuarios",
-                "operationId": "119035f2212e07ed2b4f988c4cdd59e2",
-                "responses": {
-                    "200": {
-                        "description": "Lista de usuarios",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "name": {
-                                                "type": "string",
-                                                "example": "Juan Pérez"
-                                            },
-                                            "email": {
-                                                "type": "string",
-                                                "format": "email",
-                                                "example": "juan.perez@ejemplo.com"
-                                            },
-                                            "role": {
-                                                "type": "string",
-                                                "example": "cliente"
-                                            },
-                                            "has_access": {
-                                                "type": "boolean",
-                                                "example": true
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
                                 }
                             }
                         }
