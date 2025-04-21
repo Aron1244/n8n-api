@@ -14,8 +14,5 @@ Route::post('/users', [UserController::class, 'store']);
 
 Route::post('/payments/create', [PaymentController::class, 'create']);
 Route::get('/payments/success', [PaymentController::class, 'success']);
-Route::get('/payments/cancel', [PaymentController::class, 'cancel']);
+Route::post('/payments/cancel', [PaymentController::class, 'cancel']);
 
-// routes/web.php o routes/api.php
-Route::get('/paypal/success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
-Route::get('/paypal/cancel', [PaymentController::class, 'cancel'])->name('paypal.cancel');

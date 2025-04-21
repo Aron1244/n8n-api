@@ -55,4 +55,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function hasValidSubscription()
+    {
+        return $this->payments()
+            ->where('status', Payment::STATUS_COMPLETED)
+            ->where('ends_at', '>', now())
+            ->exists();
+    }
+
 }

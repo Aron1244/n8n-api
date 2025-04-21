@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('payment_method')->nullable(); // PayPal, Stripe, etc.
             $table->string('paypal_order_id')->nullable(); // Añadido para PayPal
             $table->timestamps();
+            $table->timestamp('starts_at')->nullable();
+            $table->timestamp('ends_at')->nullable();
         });
 
         

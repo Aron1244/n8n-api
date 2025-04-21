@@ -53,10 +53,16 @@ class PaypalService
     public function captureOrder($orderId)
     {
         $accessToken = $this->getAccessToken();
-
+    
         $response = Http::withToken($accessToken)
+            ->withHeaders([
+                'Content-Type' => 'application/json',
+            ])
+            ->withBody('{}', 'application/json') // 👈 cuerpo explícitamente vacío y válido
             ->post("{$this->baseUrl}/v2/checkout/orders/{$orderId}/capture");
-
+    
         return $response->json();
     }
+    
+    
 }
