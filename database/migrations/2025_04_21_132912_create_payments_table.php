@@ -13,13 +13,20 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            // Relación con la tabla users
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            // Relación con la tabla plans
+            $table->foreignId('plan_id')->constrained('plans')->onDelete('cascade');
+            // Otros campos
             $table->string('transaction_id')->unique();
             $table->decimal('amount', 10, 2);
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->string('payment_method')->nullable(); // PayPal, Stripe, etc.
+            $table->string('paypal_order_id')->nullable(); // Añadido para PayPal
             $table->timestamps();
         });
+
+        
     }
 
     /**

@@ -10,34 +10,24 @@ class Payment extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    const STATUS_PENDING = 'pending';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_FAILED = 'failed';
+
     protected $fillable = [
         'user_id',
-        'transaction_id',
+        'plan_id',
         'amount',
         'status',
+        'paypal_order_id',  // Cambié 'transaction_id' por 'paypal_order_id' por consistencia con el controlador
         'payment_method',
+        'transaction_id',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'amount' => 'decimal:2',
-        ];
-    }
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
 
-    /**
-     * Get the user that owns the payment.
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
