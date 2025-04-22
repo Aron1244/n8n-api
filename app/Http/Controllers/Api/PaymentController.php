@@ -52,9 +52,8 @@ class PaymentController extends Controller
         $order = $this->paypal->createOrder($amount);
         
     
-        // Obtener el último transaction_id utilizado
-        $lastTransaction = Payment::orderBy('transaction_id', 'desc')->first();
-        $newTransactionId = $lastTransaction ? $lastTransaction->transaction_id + 1 : 1; // Iniciar en 1 si no hay registros
+        // Generar un transaction_id único sin depender del auto-incremento
+        $transactionId = 'PAY-' . strtoupper(uniqid());
     
         // Fecha actual (starts_at)
         $now = now();
@@ -70,7 +69,7 @@ class PaymentController extends Controller
             'status'          => Payment::STATUS_PENDING, // ✅ Usamos constante
             'paypal_order_id' => $order['id'],
             'payment_method'  => 'paypal',
-            'transaction_id'  => $newTransactionId,  // Usar el nuevo transaction_id incrementado
+            'transaction_id'  => $transactionId,  // Usar el nuevo transaction_id incrementado
             'starts_at'       => $now,
             'ends_at'         => $endsAt,
         ]);

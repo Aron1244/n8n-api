@@ -12,6 +12,9 @@ Route::put('/users/{id}', [UserController::class, 'update']);
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
 Route::post('/users', [UserController::class, 'store']);
 
+/* Route::group(['middleware' => ['cors']], function() {
+    Route::get('/payments', [PaymentController::class,'index']);
+}); */
 Route::post('/payments/create', [PaymentController::class, 'create']);
 Route::get('/payments/success', [PaymentController::class, 'success']);
 Route::post('/payments/cancel', [PaymentController::class, 'cancel']);

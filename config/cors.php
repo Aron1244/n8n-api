@@ -1,12 +1,44 @@
 <?php
 
 return [
-    'paths' => ['api/*'], // Permitir todas las rutas API
-    'allowed_methods' => ['*'], // Permitir todos los métodos (GET, POST, PUT, DELETE, etc.)
-    'allowed_origins' => ['*'], // Permitir cualquier origen en desarrollo
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cross-Origin Resource Sharing (CORS) Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure your settings for cross-origin resource sharing
+    | or "CORS". This determines what cross-origin operations may execute
+    | in web browsers. You are free to adjust these settings as needed.
+    |
+    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    |
+    */
+
+    'paths' => [
+        'api/*', 
+        'login',
+        'logout',
+        'register',
+        'user/password'
+    ],
+
+    'allowed_methods' => ['GET','POST'],
+
+    'allowed_origins' => [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:8000',
+    ],
+
     'allowed_origins_patterns' => [],
-    'allowed_headers' => ['*'], // Permitir todos los headers
+
+    'allowed_headers' => ['*'],
+
     'exposed_headers' => [],
+
     'max_age' => 0,
-    'supports_credentials' => false, // Cambia a true si usas autenticación basada en cookies
+
+    'supports_credentials' => true,
+
 ];
