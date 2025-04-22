@@ -22,6 +22,8 @@ class Payment extends Model
         'paypal_order_id',  // Cambié 'transaction_id' por 'paypal_order_id' por consistencia con el controlador
         'payment_method',
         'transaction_id',
+        'starts_at',
+        'ends_at'
     ];
 
     protected $casts = [

@@ -16,3 +16,5 @@ Route::post('/payments/create', [PaymentController::class, 'create']);
 Route::get('/payments/success', [PaymentController::class, 'success']);
 Route::post('/payments/cancel', [PaymentController::class, 'cancel']);
 
+Route::get('/payments', [PaymentController::class,'index']);
+Route::get('/payments/{id}', [PaymentController::class,'show']);

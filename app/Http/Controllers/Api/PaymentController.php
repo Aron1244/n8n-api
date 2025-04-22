@@ -8,6 +8,8 @@ use App\Models\Payment;
 use App\Models\User;
 use App\Models\Plan;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
 
 class PaymentController extends Controller
 {
@@ -71,7 +73,6 @@ class PaymentController extends Controller
             'transaction_id'  => $newTransactionId,  // Usar el nuevo transaction_id incrementado
             'starts_at'       => $now,
             'ends_at'         => $endsAt,
-            'is_active'       => now()->lessThanOrEqualTo($endsAt),
         ]);
     
         // Obtener la URL de aprobación de PayPal
@@ -145,4 +146,83 @@ class PaymentController extends Controller
     {
         return response()->json(['message' => 'El pago fue cancelado.']);
     }
+
+
+    public function show($id)
+    {
+        try {
+            if (empty($id) || !is_numeric($id)) {
+                return response()->json(['error' => 'ID de usuario inválido.'], 400);
+            }
+    
+            // Obtenemos los pagos con la información agregada
+            $payments = Payment::where('user_id', $id)
+                ->selectRaw('id, user_id, plan_id, transaction_id, amount, status, payment_method, 
+                            paypal_order_id, created_at, updated_at, 
+                            min(created_at) as starts_at, max(created_at) as ends_at')
+                ->groupBy('id', 'user_id', 'plan_id', 'transaction_id', 'amount', 'status', 
+                          'payment_method', 'paypal_order_id', 'created_at', 'updated_at', DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+                ->orderBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'), 'desc')
+                ->limit(12)
+                ->get();
+    
+            // Crear una estructura para la respuesta con los datos solicitados
+            $response = $payments->map(function ($payment) {
+                // Convertir las fechas en instancias de Carbon
+                $startsAt = \Carbon\Carbon::parse($payment->starts_at);
+                $endsAt = \Carbon\Carbon::parse($payment->ends_at);
+    
+                return [
+                    'id' => $payment->id,
+                    'user_id' => $payment->user_id,
+                    'plan_id' => $payment->plan_id,
+                    'transaction_id' => $payment->transaction_id,
+                    'amount' => (float) $payment->amount,
+                    'status' => $payment->status,
+                    'payment_method' => $payment->payment_method,
+                    'paypal_order_id' => $payment->paypal_order_id,
+                    'created_at' => $payment->created_at->toIso8601String(),
+                    'updated_at' => $payment->updated_at->toIso8601String(),
+                    'starts_at' => $startsAt->format('Y-m-d H:i:s'),
+                    'ends_at' => $endsAt->format('Y-m-d H:i:s')
+                ];
+            });
+    
+            return response()->json(['data' => $response]);
+        } catch (\Exception $e) {
+            \Log::error('Error al generar estadísticas:', [
+                'error' => $e->getMessage(),
+                'code'  => $e->getCode(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => $id
+            ]);
+    
+            return response()->json([
+                'error' => 'Error al generar estadísticas.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    
+
+    public function index(Request $request)
+    {
+        $query = Payment::query();
+
+        // Filtros opcionales si se envían por querystring
+        if ($request->has('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->has('plan_id')) {
+            $query->where('plan_id', $request->input('plan_id'));
+        }
+
+        $payments = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return response()->json($payments);
+    }
+
+
 }
