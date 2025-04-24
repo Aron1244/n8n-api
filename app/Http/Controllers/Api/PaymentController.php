@@ -60,7 +60,7 @@ class PaymentController extends Controller
     
         // Fecha de expiración (ends_at), un mes después
         $endsAt = $now->copy()->addMonth();
-    
+
         // Crear el pago con el nuevo transaction_id
         $payment = Payment::create([
             'user_id'         => $user->id,
@@ -156,12 +156,11 @@ class PaymentController extends Controller
     
             // Obtenemos los pagos con la información agregada
             $payments = Payment::where('user_id', $id)
-                ->selectRaw('id, user_id, plan_id, transaction_id, amount, status, payment_method, 
-                            paypal_order_id, created_at, updated_at, 
-                            min(created_at) as starts_at, max(created_at) as ends_at')
+                ->select('id', 'user_id', 'plan_id', 'transaction_id', 'amount', 'status', 'payment_method',
+                'paypal_order_id', 'starts_at', 'ends_at', 'created_at', 'updated_at')
                 ->groupBy('id', 'user_id', 'plan_id', 'transaction_id', 'amount', 'status', 
                           'payment_method', 'paypal_order_id', 'created_at', 'updated_at', DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
-                ->orderBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'), 'desc')
+                ->orderBy('created_at', 'desc')
                 ->limit(12)
                 ->get();
     
