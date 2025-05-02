@@ -22,36 +22,39 @@ Este es el backend del proyecto **Bit and Brain**, desarrollado en **Laravel 12*
 ---
 
 ## 📦 Instalación
-
 ```bash
-git clone https://github.com/Aron1244/n8n-api
-cd n8n-api
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan storage:link
-
+    git clone https://github.com/Aron1244/n8n-api
+    cd n8n-api
+    composer install
+    cp .env.example .env
+    php artisan key:generate
+    php artisan storage:link
+```
 
 
 Configura tu archivo .env con los datos de tu base de datos y credenciales de PayPal.
-🛠️ Migraciones y Seeders
+## 🛠️ Migraciones y Seeders
 
+```bash
 php artisan migrate --seed
+```
 
-🧹 Limpiar Caché y Rutas
+##🧹 Limpiar Caché y Rutas
 
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
+```bash
+    php artisan config:clear
+    php artisan cache:clear
+    php artisan route:clear
+    php artisan view:clear
+```
 
-💳 Configuración de PayPal en Variables de Entorno
+##💳 Configuración de PayPal en Variables de Entorno
 
 Agrega lo siguiente en tu archivo .env:
 
-PAYPAL_CLIENT_ID=tu_client_id_aqui
-PAYPAL_SECRET=tu_secret_aqui
-PAYPAL_MODE=sandbox # o 'live' para producción
-PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com # usar https://api-m.paypal.com en producción
-
-    ⚠️ Nunca subas tus credenciales reales a repositorios públicos.
+```bash
+    PAYPAL_CLIENT_ID=tu_client_id_aqui
+    PAYPAL_SECRET=tu_secret_aqui
+    PAYPAL_MODE=sandbox # o 'live' para producción
+    PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com # usar https://api-m.paypal.com en producción
+```
