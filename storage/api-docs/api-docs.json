@@ -11,6 +11,259 @@
         }
     ],
     "paths": {
+        "/payments/create": {
+            "post": {
+                "tags": [
+                    "Pagos"
+                ],
+                "summary": "Crear una orden de pago con PayPal",
+                "operationId": "8007267bce7df33b64cf275a61ea9d09",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "plan_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "plan_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "URL de aprobación de PayPal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "redirect_url": {
+                                            "type": "string",
+                                            "example": "https://paypal.com/checkoutnow?token=..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado"
+                    },
+                    "404": {
+                        "description": "Plan no encontrado"
+                    },
+                    "422": {
+                        "description": "Validación fallida"
+                    }
+                }
+            }
+        },
+        "/payments/success": {
+            "get": {
+                "tags": [
+                    "Pagos"
+                ],
+                "summary": "Captura el pago aprobado en PayPal",
+                "operationId": "646d8906a6cddb1b0d6ce831e02d7e74",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "ID de la orden generada por PayPal",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirección al cliente tras éxito"
+                    },
+                    "400": {
+                        "description": "Captura no completada"
+                    },
+                    "404": {
+                        "description": "Pago no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al capturar el pago"
+                    }
+                }
+            }
+        },
+        "/payments/cancel": {
+            "get": {
+                "tags": [
+                    "Pagos"
+                ],
+                "summary": "Cancelar el flujo de pago",
+                "operationId": "be0a1be90e932a9e5c88bee06743a0a5",
+                "responses": {
+                    "200": {
+                        "description": "Pago cancelado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El pago fue cancelado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/payments/{id}": {
+            "get": {
+                "tags": [
+                    "Pagos"
+                ],
+                "summary": "Mostrar los últimos pagos de un usuario",
+                "operationId": "08bfa6244484fbba991ab8da1734f974",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de pagos del usuario",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "transaction_id": {
+                                                        "type": "string"
+                                                    },
+                                                    "amount": {
+                                                        "type": "number",
+                                                        "format": "float"
+                                                    },
+                                                    "status": {
+                                                        "type": "string"
+                                                    },
+                                                    "starts_at": {
+                                                        "type": "string"
+                                                    },
+                                                    "ends_at": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/payments": {
+            "get": {
+                "tags": [
+                    "Pagos"
+                ],
+                "summary": "Lista paginada de todos los pagos",
+                "operationId": "bc272121a6c8230e91fa25f187409429",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por estado del pago",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "plan_id",
+                        "in": "query",
+                        "description": "Filtrar por plan",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista paginada de pagos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "status": {
+                                                        "type": "string"
+                                                    },
+                                                    "amount": {
+                                                        "type": "number",
+                                                        "format": "float"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "tags": [
@@ -394,6 +647,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Pagos",
+            "description": "Operaciones relacionadas con los pagos a través de PayPal"
+        },
         {
             "name": "Usuarios",
             "description": "Usuarios"
